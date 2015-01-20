@@ -1,0 +1,75 @@
+﻿@model ReliabilityProbability.Models.MainModel
+
+<h2>Index</h2>
+<div class="container" style="padding-top:30px; min-height:700px;">
+    @using (Html.BeginForm("CalculateData", "Home", FormMethod.Post, new { id = "calculare", @class = "form-group form-horizontal", @role = "form" }))
+    {
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="UserName" class="col-md-10">@ApplicationStrings.EnterShortestWays</label>
+                <label style="font-weight: normal;" class="col-md-10">@ApplicationStrings.EnterDesc</label>
+                <br />
+                @Html.TextAreaFor(model => model.Ways, new { @class = "form-control", rows = "4", cols = "20" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @if (Model != null && Model.WholeElements != null)
+                {
+                    <div class="form-group">
+                        @for (int i = 0; i < Model.WholeElements.Count; i++)
+                        {
+                            <div class="col-md-2">
+                                @Html.HiddenFor(model => Model.WholeElements[i].ElementValue)
+                                <label class="col-md-10">@Model.WholeElements[i].ElementValue</label>
+                                <br />
+                                @Html.TextBoxFor(model => Model.WholeElements[i].Probability, new { @class = "form-control", rows = "4", cols = "20" })
+
+                            </div>
+                        }
+                    </div>
+
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                @if (Model == null || Model.WholeElements == null || Model.WholeElements.Count == 0)
+                {
+                    <button type="submit" class="btn btn-default btn-success">@ApplicationStrings.Enter</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-default btn-success">@ApplicationStrings.Calculate</button>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                @if (Model != null && Model.WayModels != null)
+                {
+                    <p class="bg-danger">გზების რაოდებოაა : @Model.WayModels.Count</p>
+                    <p class="bg-warning">
+                        @foreach (var item in Model.WayModels)
+                        {
+                            <span>@string.Format("{0}={1}", item.Name, item.Way)</span><br />
+                        }
+                        <span>
+                            R= @Model.Result
+                        </span>
+                    </p>
+                    <p class="bg-success">
+                        შედეგი:
+                        <span>
+                            R= @Model.Propability
+                        </span>
+                    </p>
+                }
+
+            </div>
+        </div>
+    }
+</div>
