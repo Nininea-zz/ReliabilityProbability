@@ -9,7 +9,7 @@
                 <label for="UserName" class="col-md-10">@ApplicationStrings.EnterShortestWays</label>
                 <label style="font-weight: normal;" class="col-md-10">@ApplicationStrings.EnterDesc</label>
                 <br />
-                @Html.TextAreaFor(model => model.Ways, new { @class = "form-control", rows = "4", cols = "20" })
+                @Html.TextAreaFor(model => model.Ways, new { @class = "form-control", rows = "4" })
             </div>
         </div>
 
@@ -24,7 +24,8 @@
                                 @Html.HiddenFor(model => Model.WholeElements[i].ElementValue)
                                 <label class="col-md-10">@Model.WholeElements[i].ElementValue</label>
                                 <br />
-                                @Html.TextBoxFor(model => Model.WholeElements[i].Probability, new { @class = "form-control", rows = "4", cols = "20" })
+                                @Html.TextBoxFor(model => Model.WholeElements[i].Probability, new { @class = "form-control el-prop", 
+                               rows = "4" })
 
                             </div>
                         }

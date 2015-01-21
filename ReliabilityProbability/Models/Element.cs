@@ -8,6 +8,6 @@ namespace ReliabilityProbability.Models
     public class Element
     {
         public string ElementValue { get; set; }
-        public decimal Probability { get; set; }
+        public decimal? Probability { get; set; }
     }
 }

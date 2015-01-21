@@ -66,7 +66,7 @@ namespace ReliabilityProbability.Controllers
             {
                 decimal total = 0;
                 /*ვიძახებთ კომნიბაციების დათვლის მეთოდს*/
-                var combinations = GetCombination(result.Select(x =>
+                var combinations = GetCombination(result.Select(x => 
                     new WayModel { Name = x.Name, Propability = x.WayProp })
                     .ToList(), out total)
                     .OrderBy(x => x.Name.Length).ThenBy(x => x.Name);
