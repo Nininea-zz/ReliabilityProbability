@@ -11,5 +11,6 @@ namespace ReliabilityProbability.Models
         public string Way { get; set; }
         public decimal WayProp { get; set; }
         public List<string> Elements { get; set; }
+        public List<Element> ElementsWithPro { get; set; }
     }
 }

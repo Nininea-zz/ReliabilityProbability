@@ -43,13 +43,13 @@ namespace ReliabilityProbability.Controllers
 
                         if (model.WholeElements != null && elements != null)
                         {
-                            decimal wayprop = 1;
-                            foreach (var el in elements)
-                            {
-                                var prop = model.WholeElements.FirstOrDefault(x => x.ElementValue == el).Probability;
-                                wayprop *= prop.Value;
-                            }
-                            m.WayProp = wayprop;
+                            m.ElementsWithPro = (from e in elements
+                                                 join we in model.WholeElements on e equals we.ElementValue
+                                                 select new Element
+                                                 {
+                                                     ElementValue = we.ElementValue,
+                                                     Probability = we.Probability
+                                                 }).ToList();
                         }
 
                         result.Add(m);
@@ -66,9 +66,7 @@ namespace ReliabilityProbability.Controllers
             {
                 decimal total = 0;
                 /*ვიძახებთ კომნიბაციების დათვლის მეთოდს*/
-                var combinations = GetCombination(result.Select(x => 
-                    new WayModel { Name = x.Name, Propability = x.WayProp })
-                    .ToList(), out total)
+                var combinations = GetCombination(result, out total)
                     .OrderBy(x => x.Name.Length).ThenBy(x => x.Name);
 
 
@@ -82,7 +80,7 @@ namespace ReliabilityProbability.Controllers
         }
 
         /*ვაწვდით ელემენტებს შესაბამისი წოენებით*/
-        public List<WayModel> GetCombination(List<WayModel> list, out decimal total)
+        public List<WayModel> GetCombination(List<WaysModel> list, out decimal total)
         {
             List<WayModel> combinations = new List<WayModel>();
             total = 0;
@@ -93,25 +91,33 @@ namespace ReliabilityProbability.Controllers
                 string str = Convert.ToString(i, 2).PadLeft(list.Count, '0');
                 string value = "";
                 decimal prop = 1;
-
+                List<Element> elems = new List<Element>();
                 for (int j = 0; j < str.Length; j++)
                 {
                     /*იღებს ყველა კომბინაციას შესაბამისი წონებით*/
                     if (str[j] == '1')
                     {
+                        // prop *= list[j].Propability;
                         value += list[j].Name;
-                        prop *= list[j].Propability;
+                        elems.AddRange(list[j].ElementsWithPro.ToList());
                     }
+                }
+                decimal? p = 1;
+                var elements = elems.Select(x => new { x.ElementValue, x.Probability }).Distinct();
+                foreach (var item in elements)
+                {
+                    p *= item.Probability;
                 }
                 /*ხარისხის მიხედვით ვუცვლით ნიშანს ელემენტს*/
                 if ((value.Length / 2) % 2 == 1)
                 {
-                    total += prop;
+
+                    total += p.Value;
                     value = "+" + value;
                 }
                 else
                 {
-                    total -= prop;
+                    total -= p.Value;
                     value = "-" + value;
                 }
                 combinations.Add(new WayModel { Name = value, Propability = prop });

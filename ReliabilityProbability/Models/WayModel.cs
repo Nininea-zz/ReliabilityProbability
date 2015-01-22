@@ -9,5 +9,6 @@ namespace ReliabilityProbability.Models
     {
         public string Name { get; set; }
         public decimal Propability { get; set; }
+        public List<Element> Elements { get; set; }
     }
 }
